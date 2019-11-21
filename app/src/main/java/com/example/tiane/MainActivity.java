@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -14,9 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText matricula;
-    private EditText nome;
-    private EditText salario;
+    private Integer matricula;
+    private String nome;
+    private double salario;
+    private String cidade; 
     private FloatingActionButton fabSalvar;
     private FloatingActionButton fabConsultar;
     SQLiteDatabase banco;
@@ -28,9 +30,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        matricula = findViewById(R.id.matriculaCadastro);
-        nome = findViewById(R.id.nomeCadastro);
-        salario = findViewById(R.id.salarioCadastro);
+//        nome = ((EditText) findViewById(R.id.nomeCadastro)).getText().toString();
+//        matricula = (Integer.parseInt(((EditText) findViewById(R.id.matriculaCadastro)).toString()));
+//        salario = (Double.parseDouble(((EditText) findViewById(R.id.salarioCadastro)).toString()));
+
+
         fabSalvar = findViewById(R.id.floatingActionButton);
         fabConsultar = findViewById(R.id.floatingActionButton2);
 
@@ -40,14 +44,18 @@ public class MainActivity extends AppCompatActivity {
         fabSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                layoutToJava();
                 salvar();
+                javaToLayout();
             }
         });
 
         fabConsultar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                layoutToJava();
                 consultar();
+                javaToLayout();
             }
         });
 
@@ -56,22 +64,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void salvar(){
-        String abc = matricula.getText().toString();
-        String xyz = nome.getText().toString();
-        String xpto = salario.getText().toString();
+//        String abc = matricula.getText().toString();
+//        String xyz = nome;
+//        String xpto = salario.getText().toString();
 
 
 
-        banco.execSQL("insert into funcionarios (matricula, nome, salario) values ('"+abc+"','"+xyz+"','"+xpto+"')");
+        banco.execSQL("insert into funcionarios (matricula, nome, salario,cidade) values ('"+matricula+"','"+nome+"','"+salario+"','"+cidade+"')");
 
 
 //                abc=abc.toUpperCase();
-        xyz=xyz.toUpperCase();
+//        xyz=xyz.toUpperCase();
 //        xpto=xpto.toUpperCase();
 
-        matricula.setText(abc);
-        nome.setText(xyz);
-        salario.setText(xpto);
+//        matricula.setText(abc);
+//        nome.setText(xyz);
+//        salario.setText(xpto);
 
     }
 
@@ -81,6 +89,16 @@ public class MainActivity extends AppCompatActivity {
 //        cursor.moveToFirst();
 //        nome.setText(cursor.getString(0));
 //        salario.setText(cursor.getString(1));
+
+
+        Cursor cursor = banco.rawQuery("SELECT nome,salario,matricula,cidade FROM funcionarios WHERE matricula = ?", new String[] { Integer.toString(matricula) });
+        cursor.moveToFirst();
+        Toast.makeText(this, "matricula igual a:"+ cursor.getInt(2) , Toast.LENGTH_SHORT).show();
+        nome = (cursor.getString(0));
+        salario = (cursor.getDouble(1));
+	cidade = cursor.getString(3);
+
+
 
         //OS DOIS METODOS FUNCIONAM DA MESMA FORMA, O MÉTODO ABAIXO É MAIS INTUITIVO
         //VISTO QUE NÃO HÁ A NECESSIDADE DE DECLARAR NULL EM PARAMETROS PARA ORDER BY, HAVING, GROUP BY E OUTROS
@@ -119,11 +137,6 @@ public class MainActivity extends AppCompatActivity {
          * @see Cursor
          */
 
-        Cursor cursor = banco.rawQuery("SELECT nome,salario FROM funcionarios WHERE matricula = ?", new String[] { matricula.getText().toString() });
-        cursor.moveToFirst();
-        nome.setText(cursor.getString(0));
-        salario.setText(cursor.getString(1));
-
         /**
          * Runs the provided SQL and returns a {@link Cursor} over the result set.
          *
@@ -140,6 +153,39 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void javaToLayout(){
+        ((EditText) findViewById(R.id.nomeCadastro)).setText(nome);
+        ((EditText) findViewById(R.id.matriculaCadastro)).setText(""+matricula);
+        ((EditText) findViewById(R.id.salarioCadastro)).setText(""+salario);
+	((EditText) findViewById(R.id.cidade)).setText(cidade);
+    }
+
+    public void layoutToJava(){
+        if (((EditText) findViewById(R.id.nomeCadastro)).getText()==null){
+            nome = "";
+        }
+        else {
+            nome = ((EditText) findViewById(R.id.nomeCadastro)).getText().toString();
+        }
+        if (((EditText) findViewById(R.id.matriculaCadastro)).getText()==null){
+            matricula = -1;
+        }
+        else {
+            matricula = Integer.parseInt(((EditText) findViewById(R.id.matriculaCadastro)).getText().toString());
+        }
+        if (((EditText) findViewById(R.id.salarioCadastro)).getText().toString().equals("")){
+            salario = 0.0;
+        }
+        else {
+            salario = (Double.parseDouble(((EditText) findViewById(R.id.salarioCadastro)).getText().toString()));
+        }
+	if (((EditText) findViewById(R.id.cidade)).getText()==null){
+            cidade= "";
+        }
+        else {
+            cidade = ((EditText) findViewById(R.id.cidade)).getText().toString();
+        }
+    }
 
 
 }
