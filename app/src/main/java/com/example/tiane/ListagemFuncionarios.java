@@ -124,6 +124,7 @@ public class ListagemFuncionarios extends AppCompatActivity implements ActivityH
         if (listaDelete.size()==0){
             Toast.makeText(this, "não há nada a ser deletado", Toast.LENGTH_SHORT).show();
         }
+
         else{
             for (Funcionario f: listaDelete){
                 banco.execSQL("DELETE FROM funcionarios WHERE matricula = ?",new String[]{f.getMatricula()});
