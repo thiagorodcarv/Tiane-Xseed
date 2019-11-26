@@ -15,17 +15,19 @@ public class FuncionarioAdapter extends RecyclerView.Adapter {
 
     private List<Funcionario> funcionarios;
     private Context context;
+    private ActivityHolder activityHolder;
 
-    public FuncionarioAdapter(List<Funcionario> funcionarios, Context context) {
+    public FuncionarioAdapter(List<Funcionario> funcionarios, Context context,ActivityHolder activityHolder) {
         this.funcionarios = funcionarios;
         this.context = context;
+        this.activityHolder = activityHolder;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.funcionario_adapter,parent,false);
-        FuncionarioViewHolder holder = new FuncionarioViewHolder(view);
+        FuncionarioViewHolder holder = new FuncionarioViewHolder(view,activityHolder);
         return holder;
     }
 
@@ -38,12 +40,6 @@ public class FuncionarioAdapter extends RecyclerView.Adapter {
         holder.nome.setText(funcionario.getNome());
         holder.salario.setText(funcionario.getSalario().toString());
 
-        holder.nome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "ITEM CLICADO" +holder.nome.getText().toString(), Toast.LENGTH_LONG).show();
-            }
-        });
 
     }
 

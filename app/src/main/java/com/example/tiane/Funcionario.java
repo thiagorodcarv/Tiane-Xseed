@@ -1,6 +1,8 @@
 package com.example.tiane;
 
-public class Funcionario {
+import java.io.Serializable;
+
+public class Funcionario implements Serializable {
     private String matricula;
     private String nome;
     private String salario;

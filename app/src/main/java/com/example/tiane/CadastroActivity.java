@@ -2,6 +2,7 @@ package com.example.tiane;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class CadastroActivity extends AppCompatActivity {
     private Integer matricula;
     private String nome;
     private double salario;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fabConsultar;
     SQLiteDatabase banco;
     Conexao conexao;
+    private Funcionario funcionario = null;
 
 
     @Override
@@ -33,6 +35,15 @@ public class MainActivity extends AppCompatActivity {
 //        nome = ((EditText) findViewById(R.id.nomeCadastro)).getText().toString();
 //        matricula = (Integer.parseInt(((EditText) findViewById(R.id.matriculaCadastro)).toString()));
 //        salario = (Double.parseDouble(((EditText) findViewById(R.id.salarioCadastro)).toString()));
+
+        Intent intent = getIntent();
+
+        funcionario = (Funcionario) intent.getSerializableExtra("ObjetoFuncionario");
+
+        if (funcionario != null){
+            javaToLayout(funcionario);
+        }
+
 
 
         fabSalvar = findViewById(R.id.floatingActionButton);
@@ -81,6 +92,12 @@ public class MainActivity extends AppCompatActivity {
 //        nome.setText(xyz);
 //        salario.setText(xpto);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("DEU ONDESTROY");
     }
 
     public void consultar(){
@@ -157,7 +174,14 @@ public class MainActivity extends AppCompatActivity {
         ((EditText) findViewById(R.id.nomeCadastro)).setText(nome);
         ((EditText) findViewById(R.id.matriculaCadastro)).setText(""+matricula);
         ((EditText) findViewById(R.id.salarioCadastro)).setText(""+salario);
-	((EditText) findViewById(R.id.cidade)).setText(cidade);
+	    ((EditText) findViewById(R.id.cidade)).setText(cidade);
+    }
+
+    public void javaToLayout(Funcionario funcionario){
+        ((EditText) findViewById(R.id.nomeCadastro)).setText(funcionario.getNome());
+        ((EditText) findViewById(R.id.matriculaCadastro)).setText(""+funcionario.getMatricula());
+        ((EditText) findViewById(R.id.salarioCadastro)).setText(""+funcionario.getSalario());
+//        ((EditText) findViewById(R.id.cidade)).setText(cidade);
     }
 
     public void layoutToJava(){
