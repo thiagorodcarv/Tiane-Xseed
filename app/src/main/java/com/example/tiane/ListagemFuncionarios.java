@@ -110,6 +110,12 @@ public class ListagemFuncionarios extends AppCompatActivity implements ActivityH
         });
         return true;
     }
+
+    public void marcarTudo(MenuItem menuItem){
+        adapter.setCheckBoxAll(true);
+        adapter.notifyDataSetChanged();
+    }
+
     public void procuraFuncionario(String nome){
         listaFuncionariosView.clear();
         for(Funcionario f : listaFuncionarios){
@@ -118,6 +124,7 @@ public class ListagemFuncionarios extends AppCompatActivity implements ActivityH
             }
         }
         adapter.notifyDataSetChanged();
+
     }
 
     public void delete(MenuItem menuItem){

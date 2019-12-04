@@ -16,6 +16,7 @@ public class FuncionarioAdapter extends RecyclerView.Adapter {
     private List<Funcionario> funcionarios;
     private Context context;
     private ActivityHolder activityHolder;
+    private boolean b;
 
     public FuncionarioAdapter(List<Funcionario> funcionarios, Context context,ActivityHolder activityHolder) {
         this.funcionarios = funcionarios;
@@ -39,7 +40,7 @@ public class FuncionarioAdapter extends RecyclerView.Adapter {
         holder.matricula.setText(funcionario.getMatricula().toString());
         holder.nome.setText(funcionario.getNome());
         holder.salario.setText(funcionario.getSalario().toString());
-
+        holder.checkBox.setChecked(b);
 
     }
 
@@ -47,4 +48,9 @@ public class FuncionarioAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return funcionarios.size();
     }
+
+    public void setCheckBoxAll(boolean b){
+        this.b = b;
+    }
 }
+
